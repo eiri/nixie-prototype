@@ -6,6 +6,9 @@ import copy, uuid
 
 storage = {}
 
+def config(cfg={}):
+  return cfg
+
 def create(key=None, value=0):
   if not isinstance(value, (int, long)):
     return None

@@ -3,6 +3,10 @@ from nixie import nixie
 
 class NixieTestCase(unittest.TestCase):
 
+  def test_00_config(self):
+    cfg = nixie.config()
+    self.assertIsInstance(cfg, dict)
+
   def test_01_create_default(self):
     regexp = '[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}'
     '-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}'
