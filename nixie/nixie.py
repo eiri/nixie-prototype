@@ -6,11 +6,10 @@ import copy, uuid
 
 storage = {}
 
-def create(key=None, value=0):
+def create(value=0):
   if not isinstance(value, (int, long)):
     return None
-  if key is None:
-    key = str(uuid.uuid4())
+  key = uuid.uuid4().hex
   if key not in storage:
     storage[key] = value
   return key
