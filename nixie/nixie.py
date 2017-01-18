@@ -2,21 +2,28 @@
 Main API library
 """
 
-import copy, uuid, imp
+import copy, uuid, imp, functools
 
 backend = None
 
-def __get_storage():
-  global backend
-  if backend is None:
-    module_info = imp.find_module('backend', ['./nixie'])
-    backend = imp.load_module('backend', *module_info)
-  storage = backend.get_storage()
-  # print 'storage at <{0}>'.format(hex(id(storage)))
-  return storage
+def with_storage(func=None, debug=False):
+  if func is None:
+    return functools.partial(with_storage, debug=debug)
+  @functools.wraps(func)
+  def wrapper(*args, **kwargs):
+    global backend
+    if backend is None:
+      module_info = imp.find_module('backend', ['./nixie'])
+      backend = imp.load_module('backend', *module_info)
+    storage = backend.get_storage()
+    if debug:
+      print 'func {}, storage <{}>\n'.format(func.__name__, hex(id(storage)))
+    func_with_storage = functools.partial(func, storage=storage)
+    return func_with_storage(*args, **kwargs)
+  return wrapper
 
-def create(value=0):
-  storage = __get_storage()
+@with_storage
+def create(value=0, storage=None):
   if not isinstance(value, (int, long)):
     return None
   key = uuid.uuid4().hex
@@ -24,31 +31,31 @@ def create(value=0):
     storage[key] = value
   return key
 
-def exists(key):
-  storage = __get_storage()
+@with_storage
+def exists(key, storage=None):
   return key in storage
 
-def list():
-  storage = __get_storage()
+@with_storage
+def list(storage=None):
   return copy.copy(storage)
 
-def read(key):
-  storage = __get_storage()
+@with_storage
+def read(key, storage=None):
   if key in storage:
     return storage[key]
   else:
     return None
 
-def update(key, value=1):
-  storage = __get_storage()
+@with_storage
+def update(key, value=1, storage=None):
   if key in storage and isinstance(value, (int, long)):
     storage[key] += value
     return storage[key]
   else:
     return None
 
-def delete(key):
-  storage = __get_storage()
+@with_storage
+def delete(key, storage=None):
   if key in storage:
     del storage[key]
     return True
