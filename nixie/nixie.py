@@ -2,7 +2,7 @@
 Main API library
 """
 
-import copy, uuid, imp, functools
+import uuid, imp, functools
 
 backend = None
 
@@ -15,10 +15,9 @@ def with_storage(func=None, debug=False):
     if backend is None:
       module_info = imp.find_module('backend', ['./nixie'])
       backend = imp.load_module('backend', *module_info)
-    storage = backend.get_storage()
     if debug:
-      print 'func {}, storage <{}>\n'.format(func.__name__, hex(id(storage)))
-    func_with_storage = functools.partial(func, storage=storage)
+      print 'func {}, backend <{}>\n'.format(func.__name__, backend.as_str())
+    func_with_storage = functools.partial(func, storage=backend)
     return func_with_storage(*args, **kwargs)
   return wrapper
 
@@ -27,37 +26,38 @@ def create(value=0, storage=None):
   if not isinstance(value, (int, long)):
     return None
   key = uuid.uuid4().hex
-  if key not in storage:
-    storage[key] = value
+  if not storage.has(key):
+    storage.set(key, value)
   return key
 
 @with_storage
 def exists(key, storage=None):
-  return key in storage
+  return storage.has(key)
 
 @with_storage
 def list(storage=None):
-  return copy.copy(storage)
+  return storage.as_dict()
 
 @with_storage
 def read(key, storage=None):
-  if key in storage:
-    return storage[key]
+  if storage.has(key):
+    return storage.get(key)
   else:
     return None
 
 @with_storage
 def update(key, value=1, storage=None):
-  if key in storage and isinstance(value, (int, long)):
-    storage[key] += value
-    return storage[key]
+  if storage.has(key) and isinstance(value, (int, long)):
+    new_value = storage.get(key) + value
+    storage.set(key, new_value)
+    return new_value
   else:
     return None
 
 @with_storage
 def delete(key, storage=None):
-  if key in storage:
-    del storage[key]
+  if storage.has(key):
+    storage.remove(key)
     return True
   else:
     return None
