@@ -2,22 +2,28 @@
 Main API library
 """
 
-import uuid, imp, functools
+import os, uuid, imp, functools
 
-backend = None
+cfg = {
+  'frontend': None,
+  'backend': 'backend'
+}
+
+__backend = None
 
 def with_storage(func=None, debug=False):
   if func is None:
     return functools.partial(with_storage, debug=debug)
   @functools.wraps(func)
   def wrapper(*args, **kwargs):
-    global backend
-    if backend is None:
-      module_info = imp.find_module('backend', ['./nixie'])
-      backend = imp.load_module('backend', *module_info)
+    global __backend
+    if __backend is None:
+      here = os.path.dirname(os.path.realpath(__file__))
+      module_info = imp.find_module(cfg['backend'], [here])
+      __backend = imp.load_module('backend', *module_info)
     if debug:
-      print 'func {}, backend <{}>\n'.format(func.__name__, backend.as_str())
-    func_with_storage = functools.partial(func, storage=backend)
+      print 'func {}, backend <{}>\n'.format(func.__name__, __backend.as_str())
+    func_with_storage = functools.partial(func, storage=__backend)
     return func_with_storage(*args, **kwargs)
   return wrapper
 
