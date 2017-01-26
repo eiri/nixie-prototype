@@ -6,7 +6,7 @@ import os, uuid, imp, functools
 
 cfg = {
   'frontend': None,
-  'backend': 'backend'
+  'backend': 'backend_ini'
 }
 
 __backend = None
