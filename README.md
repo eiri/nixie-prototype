@@ -1,8 +1,10 @@
 # Nixie
 
+![project: prototype](https://img.shields.io/badge/project-prototype-orange.svg)
+
 ## Overview
 
-Service that allows to create update and delete counters. In sence, while we can have document store, column store, key value store, this then is an integer store. Main application, naturally, metrics collector.
+Service that allows to create, update and delete counters.
 
 ## Run tests
 `make test`
