@@ -1,23 +1,22 @@
-"""
-Dict storage backend
-"""
+import collections
 
-class Backend(dict):
+class Backend(collections.MutableMapping):
+  """Dict-like storage for counters"""
 
-  def __init__(self, *arg, **kwarg):
-    super(Backend, self).__init__(*arg, **kwarg)
+  def __init__(self):
+    self.store = dict()
 
-  def get(self, key):
-    return int(self[key]) if key in self else None
+  def __getitem__(self, key):
+    return self.store[key]
 
-  def set(self, key, value):
-    self[key] = int(value)
-    return True
+  def __setitem__(self, key, value):
+    self.store[key] = int(value)
 
-  def remove(self, key):
-    if key in self:
-      del self[key]
-    return True
+  def __delitem__(self, key):
+    del self.store[key]
 
-  def has(self, key):
-    return key in self
+  def __iter__(self):
+    return iter(self.store)
+
+  def __len__(self):
+    return len(self.store)

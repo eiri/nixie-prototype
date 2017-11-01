@@ -1,44 +1,43 @@
-"""
-Main API library
-"""
-
 import uuid, collections, backend
 
 class Nixie:
+  """Core API library"""
 
   def __init__(self):
     self.storage = backend.Backend()
 
+  """CRUD"""
   def create(self):
     key = uuid.uuid4().hex
-    if self.storage.has(key):
+    if key in self.storage:
       raise ValueError('Existing key')
-    self.storage.set(key, 0)
+    self.storage[key] = 0
     return key
 
-  def exists(self, key):
-    return self.storage.has(key)
-
-  def list(self):
-    return self.storage.keys()
-
   def read(self, key):
-    if self.storage.has(key):
-      return self.storage.get(key)
+    if key in self.storage:
+      return self.storage[key]
     else:
       return None
 
   def update(self, key, value=1):
-    if not self.storage.has(key):
+    if not key in self.storage:
       raise ValueError('Unknown key')
     if not isinstance(value, (int, long)):
       raise ValueError('Invalid value')
-    new_value = self.storage.get(key) + value
-    self.storage.set(key, new_value)
+    new_value = self.storage[key] + int(value)
+    self.storage[key] = new_value
     return new_value
 
   def delete(self, key):
-    if not self.storage.has(key):
+    if not key in self.storage:
       raise ValueError('Unknown key')
-    self.storage.remove(key)
+    del self.storage[key]
     return True
+
+  """additional"""
+  def exists(self, key):
+    return key in self.storage
+
+  def list(self):
+    return self.storage.keys()
