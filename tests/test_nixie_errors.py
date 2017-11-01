@@ -3,10 +3,6 @@ from nixie import nixie
 
 class NixieErrorsTestCase(unittest.TestCase):
 
-  def test_create_with_bad_value(self):
-    key = nixie.create('42')
-    self.assertIsNone(key)
-
   def test_read_missing(self):
     value = nixie.read('missing_counter')
     self.assertIsNone(value)

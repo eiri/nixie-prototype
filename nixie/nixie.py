@@ -28,12 +28,10 @@ def with_storage(func=None, debug=False):
   return wrapper
 
 @with_storage
-def create(value=0, storage=None):
-  if not isinstance(value, (int, long)):
-    return None
+def create(storage=None):
   key = uuid.uuid4().hex
   if not storage.has(key):
-    storage.set(key, value)
+    storage.set(key, 0)
   return key
 
 @with_storage

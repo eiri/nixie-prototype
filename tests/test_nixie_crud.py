@@ -9,20 +9,10 @@ class NixieCRUDTestCase(unittest.TestCase):
     key = nixie.create()
     self.assertRegexpMatches(key, self.regexp)
 
-  def test_create_with_value(self):
-    key = nixie.create(42)
-    self.assertRegexpMatches(key, self.regexp)
-
-  def test_create_and_read_default(self):
+  def test_create_and_read(self):
     key = nixie.create()
     value = nixie.read(key)
     self.assertEqual(value, 0)
-
-  def test_create_and_read_with_value(self):
-    counter_value = 42
-    key = nixie.create(counter_value)
-    value = nixie.read(key)
-    self.assertEqual(value, counter_value)
 
   def test_list(self):
     counters = nixie.list()
@@ -30,7 +20,7 @@ class NixieCRUDTestCase(unittest.TestCase):
     [self.assertRegexpMatches(k, self.regexp) for k in counters.keys()]
     [self.assertIsInstance(v, (int, long)) for v in counters.values()]
 
-  def test_update_default(self):
+  def test_update(self):
     key = nixie.create()
     value = nixie.update(key)
     self.assertEqual(value, 1)
@@ -38,16 +28,16 @@ class NixieCRUDTestCase(unittest.TestCase):
     self.assertEqual(value, 2)
 
   def test_update_with_value(self):
-    key = nixie.create(1)
+    key = nixie.create()
     value = nixie.update(key, 4)
-    self.assertEqual(value, 5)
+    self.assertEqual(value, 4)
     value = nixie.update(key, 12)
-    self.assertEqual(value, 17)
+    self.assertEqual(value, 16)
 
   def test_update_with_negative_value(self):
-    key = nixie.create(10)
+    key = nixie.create()
     value = nixie.update(key, -5)
-    self.assertEqual(value, 5)
+    self.assertEqual(value, -5)
 
   def test_exists(self):
     key = nixie.create()
