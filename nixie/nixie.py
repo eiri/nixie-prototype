@@ -6,7 +6,7 @@ import os, uuid, imp, functools
 
 cfg = {
   'frontend': None,
-  'backend': 'backend_ini'
+  'backend': 'backend'
 }
 
 __backend = None
@@ -22,7 +22,7 @@ def with_storage(func=None, debug=False):
       module_info = imp.find_module(cfg['backend'], [here])
       __backend = imp.load_module('backend', *module_info)
     if debug:
-      print 'func {}, backend <{}>\n'.format(func.__name__, __backend.as_str())
+      print 'func {}, backend <{}>\n'.format(func.__name__, __backend)
     func_with_storage = functools.partial(func, storage=__backend)
     return func_with_storage(*args, **kwargs)
   return wrapper

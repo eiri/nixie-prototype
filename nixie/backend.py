@@ -21,6 +21,3 @@ def has(key):
 
 def keys():
   return __storage.keys()
-
-def as_str():
-  return hex(id(__storage))

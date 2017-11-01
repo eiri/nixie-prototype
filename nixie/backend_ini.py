@@ -27,6 +27,3 @@ def has(key):
 
 def keys():
   return [key for (key, _) in __storage.items('main')]
-
-def as_str():
-  return hex(id(__storage))
