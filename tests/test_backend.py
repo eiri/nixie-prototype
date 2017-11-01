@@ -6,7 +6,6 @@ class BackendTestCase(unittest.TestCase):
   regexp = '[a-f0-9]{32}'
 
   def setUp(self):
-    print 'dbg'
     self.be = Backend()
     self.key = self.be.new()
 
