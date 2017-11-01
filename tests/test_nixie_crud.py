@@ -1,4 +1,4 @@
-import unittest, uuid
+import unittest
 from nixie.core import Nixie
 
 class NixieCRUDTestCase(unittest.TestCase):
@@ -13,7 +13,7 @@ class NixieCRUDTestCase(unittest.TestCase):
     self.assertRegexpMatches(key2, self.regexp)
     self.assertNotEqual(key1, key2)
 
-  def test_create_and_read(self):
+  def test_read(self):
     nx = Nixie()
     key1 = nx.create()
     key2 = nx.create()
@@ -28,7 +28,7 @@ class NixieCRUDTestCase(unittest.TestCase):
     self.assertIsInstance(keys, list)
     [self.assertRegexpMatches(key, self.regexp) for key in keys]
 
-  def test_update_separate(self):
+  def test_update(self):
     nx = Nixie()
     key1 = nx.create()
     key2 = nx.create()
