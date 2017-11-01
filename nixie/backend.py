@@ -20,3 +20,9 @@ class Backend(collections.MutableMapping):
 
   def __len__(self):
     return len(self.store)
+
+  def __repr__(self):
+    return 'nixie.Backend of {}'.format(hex(id(self)))
+
+  def __str__(self):
+    return 'nixie.Backend<id: {}; length: {}>'.format(hex(id(self)), len(self))
