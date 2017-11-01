@@ -1,7 +1,14 @@
-import collections
+import uuid, collections
 
 class Backend(collections.MutableMapping):
   """Dict-like storage for counters"""
+
+  def new(self):
+    key = uuid.uuid4().hex
+    if key in self.store:
+      raise ValueError('key collision')
+    self.store[key] = 0
+    return key
 
   def __init__(self):
     self.store = dict()

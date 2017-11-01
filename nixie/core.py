@@ -1,4 +1,4 @@
-import uuid, collections, backend
+import backend
 
 class Nixie:
   """Core API library"""
@@ -8,10 +8,7 @@ class Nixie:
 
   """CRUD"""
   def create(self):
-    key = uuid.uuid4().hex
-    if key in self.storage:
-      raise ValueError('Existing key')
-    self.storage[key] = 0
+    key = self.storage.new()
     return key
 
   def read(self, key):
@@ -25,9 +22,8 @@ class Nixie:
       raise ValueError('Unknown key')
     if not isinstance(value, (int, long)):
       raise ValueError('Invalid value')
-    new_value = self.storage[key] + int(value)
-    self.storage[key] = new_value
-    return new_value
+    self.storage[key] += int(value)
+    return self.storage[key]
 
   def delete(self, key):
     if not key in self.storage:
