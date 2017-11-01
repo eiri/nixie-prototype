@@ -40,7 +40,7 @@ def exists(key, storage=None):
 
 @with_storage
 def list(storage=None):
-  return storage.as_dict()
+  return storage.keys()
 
 @with_storage
 def read(key, storage=None):

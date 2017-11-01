@@ -2,8 +2,6 @@
 Dict storage plugin
 """
 
-import copy
-
 __storage = {}
 
 def get(key):
@@ -21,8 +19,8 @@ def remove(key):
 def has(key):
   return key in __storage
 
-def as_dict():
-  return copy.copy(__storage)
+def keys():
+  return __storage.keys()
 
 def as_str():
   return hex(id(__storage))

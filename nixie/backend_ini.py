@@ -2,7 +2,7 @@
 Init file storage plugin
 """
 
-import copy, ConfigParser
+import ConfigParser
 
 __storage = ConfigParser.RawConfigParser()
 __storage.add_section('main')
@@ -25,8 +25,8 @@ def remove(key):
 def has(key):
   return __storage.has_option('main', key)
 
-def as_dict():
-  return {key: int(value) for (key, value) in __storage.items('main')}
+def keys():
+  return [key for (key, _) in __storage.items('main')]
 
 def as_str():
   return hex(id(__storage))

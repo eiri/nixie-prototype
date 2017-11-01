@@ -15,10 +15,9 @@ class NixieCRUDTestCase(unittest.TestCase):
     self.assertEqual(value, 0)
 
   def test_list(self):
-    counters = nixie.list()
-    self.assertIsInstance(counters, dict)
-    [self.assertRegexpMatches(k, self.regexp) for k in counters.keys()]
-    [self.assertIsInstance(v, (int, long)) for v in counters.values()]
+    keys = nixie.list()
+    self.assertIsInstance(keys, list)
+    [self.assertRegexpMatches(key, self.regexp) for key in keys]
 
   def test_update(self):
     key = nixie.create()
