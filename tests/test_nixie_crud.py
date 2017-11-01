@@ -1,7 +1,7 @@
 import unittest, uuid
 from nixie import nixie
 
-class NixieTestCase(unittest.TestCase):
+class NixieCRUDTestCase(unittest.TestCase):
 
   regexp = '[a-f0-9]{32}'
 
@@ -13,10 +13,6 @@ class NixieTestCase(unittest.TestCase):
     key = nixie.create(42)
     self.assertRegexpMatches(key, self.regexp)
 
-  def test_create_with_bad_value(self):
-    key = nixie.create('42')
-    self.assertIsNone(key)
-
   def test_create_and_read_default(self):
     key = nixie.create()
     value = nixie.read(key)
@@ -27,10 +23,6 @@ class NixieTestCase(unittest.TestCase):
     key = nixie.create(counter_value)
     value = nixie.read(key)
     self.assertEqual(value, counter_value)
-
-  def test_read_missing(self):
-    value = nixie.read('missing_counter')
-    self.assertIsNone(value)
 
   def test_list(self):
     counters = nixie.list()
@@ -57,15 +49,6 @@ class NixieTestCase(unittest.TestCase):
     value = nixie.update(key, -5)
     self.assertEqual(value, 5)
 
-  def test_update_missing(self):
-    value = nixie.update('missing_counter')
-    self.assertIsNone(value)
-
-  def test_update_with_wrong_value(self):
-    key = nixie.create()
-    value = nixie.update(key, '5')
-    self.assertIsNone(value)
-
   def test_exists(self):
     key = nixie.create()
     exists = nixie.exists(key)
@@ -82,11 +65,4 @@ class NixieTestCase(unittest.TestCase):
     delete_result = nixie.delete(key)
     exists_after = nixie.exists(key)
     self.assertTrue(delete_result)
-    self.assertFalse(exists_after)
-
-  def test_delete_missing(self):
-    counter_name = 'missing_counter'
-    delete_result = nixie.delete(counter_name)
-    exists_after = nixie.exists(counter_name)
-    self.assertIsNone(delete_result)
     self.assertFalse(exists_after)
