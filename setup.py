@@ -8,6 +8,6 @@ setup(
   description='Counter service',
   author='Eric Avdey',
   author_email='eiri@eiri.ca',
-  url='https://github.com/eiri/nixie/',
+  url='https://github.com/eiri/nixie-prototype/',
   packages=['nixie']
 )
