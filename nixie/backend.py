@@ -1,23 +1,26 @@
 """
-Dict storage plugin
+Dict storage backend
 """
 
-__storage = {}
+class Backend():
 
-def get(key):
-  return int(__storage[key]) if key in __storage else None
+  def __init__(self):
+    self.storage = {}
 
-def set(key, value):
-  __storage[key] = int(value)
-  return True
+  def get(self, key):
+    return int(self.storage[key]) if key in self.storage else None
 
-def remove(key):
-  if key in __storage:
-    del __storage[key]
-  return True
+  def set(self, key, value):
+    self.storage[key] = int(value)
+    return True
 
-def has(key):
-  return key in __storage
+  def remove(self, key):
+    if key in self.storage:
+      del self.storage[key]
+    return True
 
-def keys():
-  return __storage.keys()
+  def has(self, key):
+    return key in self.storage
+
+  def keys(self):
+    return self.storage.keys()
