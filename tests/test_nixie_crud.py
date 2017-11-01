@@ -20,14 +20,6 @@ class NixieCRUDTestCase(unittest.TestCase):
     self.assertEqual(nx.read(key1), 0)
     self.assertEqual(nx.read(key2), 0)
 
-  def test_list(self):
-    nx = Nixie()
-    nx.create()
-    nx.create()
-    keys = nx.list()
-    self.assertIsInstance(keys, list)
-    [self.assertRegexpMatches(key, self.regexp) for key in keys]
-
   def test_update(self):
     nx = Nixie()
     key1 = nx.create()
@@ -55,14 +47,6 @@ class NixieCRUDTestCase(unittest.TestCase):
     nx = Nixie()
     key = nx.create()
     self.assertEqual(nx.update(key, -5), -5)
-
-  def test_exists(self):
-    nx = Nixie()
-    key1 = nx.create()
-    key2 = nx.create()
-    self.assertTrue(nx.exists(key1))
-    self.assertTrue(nx.exists(key2))
-    self.assertFalse(nx.exists('missing_counter'))
 
   def test_delete(self):
     nx = Nixie()

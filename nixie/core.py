@@ -31,7 +31,7 @@ class Nixie:
     del self.storage[key]
     return True
 
-  """additional"""
+  """extra"""
   def exists(self, key):
     return key in self.storage
 
