@@ -2,7 +2,7 @@
 Main API library
 """
 
-import uuid, backend
+import uuid, collections, backend
 
 class Nixie:
 
