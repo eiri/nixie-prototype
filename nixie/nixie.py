@@ -4,11 +4,6 @@ Main API library
 
 import os, uuid, imp, functools
 
-cfg = {
-  'frontend': None,
-  'backend': 'backend'
-}
-
 __backend = None
 
 def with_storage(func=None, debug=False):
@@ -19,7 +14,7 @@ def with_storage(func=None, debug=False):
     global __backend
     if __backend is None:
       here = os.path.dirname(os.path.realpath(__file__))
-      module_info = imp.find_module(cfg['backend'], [here])
+      module_info = imp.find_module('backend', [here])
       __backend = imp.load_module('backend', *module_info)
     if debug:
       print 'func {}, backend <{}>\n'.format(func.__name__, __backend)
