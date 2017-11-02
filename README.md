@@ -1,6 +1,7 @@
 # Nixie
 
 ![project: prototype](https://img.shields.io/badge/project-prototype-orange.svg)
+[![Build Status](https://travis-ci.org/eiri/nixie-prototype.svg?branch=master)](https://travis-ci.org/eiri/nixie-prototype)
 
 ## Overview
 
