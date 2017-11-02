@@ -1,4 +1,4 @@
-import uuid, collections
+import uuid, collections, time
 
 class Backend(collections.MutableMapping):
   """Dict-like storage for counters"""
@@ -7,17 +7,24 @@ class Backend(collections.MutableMapping):
     key = uuid.uuid4().hex
     if key in self.store:
       raise ValueError('key collision')
-    self.store[key] = 0
+    self.__setitem__(key, 0)
     return key
+
+  def get(self, key):
+    return self.store[key]
 
   def __init__(self):
     self.store = dict()
 
   def __getitem__(self, key):
-    return self.store[key]
+    (_, val) = self.store[key]
+    return val
 
   def __setitem__(self, key, value):
-    self.store[key] = int(value)
+    ts = int(time.time())
+    val = int(value)
+    self.store[key] = (ts, val)
+    return val
 
   def __delitem__(self, key):
     del self.store[key]
