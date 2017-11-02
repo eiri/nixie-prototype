@@ -18,8 +18,7 @@ class BackendTestCase(unittest.TestCase):
   def test_get(self):
     (ts, val) = self.be.get(self.key)
     now = int(time.time())
-    self.assertLessEqual(ts, now)
-    self.assertGreaterEqual(1, now - ts)
+    self.assertEqual(ts, now)
     self.assertEqual(val, 0)
 
   def test_update(self):
@@ -38,6 +37,13 @@ class BackendTestCase(unittest.TestCase):
     (ts2, val2) = self.be.get(self.key)
     self.assertGreater(ts2, ts1)
     self.assertEqual(val2, 24)
+
+  def test_all(self):
+    self.be[self.key] = 1
+    self.be[self.key] = 2
+    now = int(time.time())
+    trb = self.be.all(self.key)
+    self.assertEqual(trb, [(now, 0), (now, 1), (now, 2)])
 
   def test_in(self):
     self.assertTrue(self.key in self.be)
