@@ -1,4 +1,4 @@
-import unittest, uuid
+import unittest, time
 from nixie.backend import Backend
 
 class BackendTestCase(unittest.TestCase):
@@ -15,11 +15,29 @@ class BackendTestCase(unittest.TestCase):
   def test_read(self):
     self.assertEqual(self.be[self.key], 0)
 
+  def test_get(self):
+    (ts, val) = self.be.get(self.key)
+    now = int(time.time())
+    self.assertLessEqual(ts, now)
+    self.assertGreaterEqual(1, now - ts)
+    self.assertEqual(val, 0)
+
   def test_update(self):
     self.be[self.key] = 12
     self.assertEqual(self.be[self.key], 12)
     self.be[self.key] = 24
     self.assertEqual(self.be[self.key], 24)
+
+  def test_update_timestamped(self):
+    self.be[self.key] = 12
+    (ts1, val1) = self.be.get(self.key)
+    self.assertLessEqual(ts1, int(time.time()))
+    self.assertEqual(val1, 12)
+    time.sleep(1)
+    self.be[self.key] = 24
+    (ts2, val2) = self.be.get(self.key)
+    self.assertGreater(ts2, ts1)
+    self.assertEqual(val2, 24)
 
   def test_in(self):
     self.assertTrue(self.key in self.be)
