@@ -1,28 +1,35 @@
-"""
-Dict storage plugin
-"""
+import uuid, collections
 
-import copy
+class Backend(collections.MutableMapping):
+  """Dict-like storage for counters"""
 
-__storage = {}
+  def new(self):
+    key = uuid.uuid4().hex
+    if key in self.store:
+      raise ValueError('key collision')
+    self.store[key] = 0
+    return key
 
-def get(key):
-  return int(__storage[key]) if key in __storage else None
+  def __init__(self):
+    self.store = dict()
 
-def set(key, value):
-  __storage[key] = int(value)
-  return True
+  def __getitem__(self, key):
+    return self.store[key]
 
-def remove(key):
-  if key in __storage:
-    del __storage[key]
-  return True
+  def __setitem__(self, key, value):
+    self.store[key] = int(value)
 
-def has(key):
-  return key in __storage
+  def __delitem__(self, key):
+    del self.store[key]
 
-def as_dict():
-  return copy.copy(__storage)
+  def __iter__(self):
+    return iter(self.store)
 
-def as_str():
-  return hex(id(__storage))
+  def __len__(self):
+    return len(self.store)
+
+  def __repr__(self):
+    return 'nixie.Backend of {}'.format(hex(id(self)))
+
+  def __str__(self):
+    return 'nixie.Backend<id: {}; length: {}>'.format(hex(id(self)), len(self))
