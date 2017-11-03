@@ -19,7 +19,7 @@ class NixieExtraTestCase(unittest.TestCase):
     key2 = nx.create()
     self.assertTrue(nx.exists(key1))
     self.assertTrue(nx.exists(key2))
-    self.assertFalse(nx.exists('missing_counter'))
+    self.assertFalse(nx.exists('missing'))
 
   def test_put(self):
     nx = Nixie()
@@ -31,6 +31,10 @@ class NixieExtraTestCase(unittest.TestCase):
     self.assertEqual(nx.put(key2, 15), 15)
     self.assertEqual(nx.put(key2, 32), 32)
     self.assertEqual(nx.read(key1), 24)
+    self.assertEqual(nx.put(key1, -12), -12)
+    self.assertEqual(nx.put(key2, 0), 0)
+    self.assertEqual(nx.read(key1), -12)
+    self.assertEqual(nx.read(key2), 0)
 
   def test_incr(self):
     nx = Nixie()
