@@ -5,12 +5,12 @@ class NixieErrorsTestCase(unittest.TestCase):
 
   def test_read_missing(self):
     nx = Nixie()
-    self.assertIsNone(nx.read('missing_counter'))
+    self.assertIsNone(nx.read('missing'))
 
   def test_update_missing(self):
     nx = Nixie()
     with self.assertRaises(KeyError):
-      nx.update('missing_counter')
+      nx.update('missing')
 
   def test_update_with_wrong_value(self):
     nx = Nixie()
@@ -21,4 +21,4 @@ class NixieErrorsTestCase(unittest.TestCase):
   def test_delete_missing(self):
     nx = Nixie()
     with self.assertRaises(KeyError):
-      nx.delete('missing_counter')
+      nx.delete('missing')
