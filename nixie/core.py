@@ -48,9 +48,12 @@ class Nixie:
   def __validate_key_value(self, key, value):
     if not key in self.storage:
       raise KeyError('Unknown key {}'.format(key))
-    if not isinstance(value, (int, long)):
+    if (isinstance(value, (int, long))
+        or value.isdigit()
+        or (value[0] in ['-', '+'] and value[1:].isdigit())):
+      return True
+    else:
       raise ValueError('Invalid value {}'.format(value))
-    return True
 
 
   class KeyError(Exception):
