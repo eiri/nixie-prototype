@@ -47,7 +47,20 @@ class Nixie:
 
   def __validate_key_value(self, key, value):
     if not key in self.storage:
-      raise ValueError('Unknown key')
-    if not isinstance(value, (int, long)):
-      raise ValueError('Invalid value')
-    return True
+      raise KeyError('Unknown key {}'.format(key))
+    if (isinstance(value, (int, long))
+        or value.isdigit()
+        or (value[0] in ['-', '+'] and value[1:].isdigit())):
+      return True
+    else:
+      raise ValueError('Invalid value {}'.format(value))
+
+
+  class KeyError(Exception):
+    """Custom error on missing key"""
+
+    def __init__(self, value):
+      self.value = value
+
+    def __str__(self):
+      return repr(self.value)
