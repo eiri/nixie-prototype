@@ -1,5 +1,5 @@
 from flask import Flask, Response, request
-from nixie.core import Nixie
+from nixie.core import Nixie, KeyError
 
 class Frontend:
   """REST frontend"""
@@ -48,16 +48,16 @@ class Frontend:
       resp = str(new_val)
       return Response(resp, status=200, mimetype='text/plain')
     except KeyError as e:
-      return Response(e, status=404, mimetype='text/plain')
+      return Response(str(e), status=404, mimetype='text/plain')
     except ValueError as e:
-      return Response(e, status=400, mimetype='text/plain')
+      return Response(str(e), status=400, mimetype='text/plain')
 
   def delete(self, key):
     try:
       self.nx.delete(key)
       return Response('', status=204, mimetype='text/plain')
     except KeyError as e:
-      return Response(e, status=404, mimetype='text/plain')
+      return Response(str(e), status=404, mimetype='text/plain')
 
   """extra"""
   def exists(self, key):
@@ -77,9 +77,9 @@ class Frontend:
       resp = str(new_val)
       return Response(resp, status=200, mimetype='text/plain')
     except KeyError as e:
-      return Response(e, status=404, mimetype='text/plain')
+      return Response(str(e), status=404, mimetype='text/plain')
     except ValueError as e:
-      return Response(e, status=400, mimetype='text/plain')
+      return Response(str(e), status=400, mimetype='text/plain')
 
   def incr(self, key):
     try:
@@ -87,7 +87,7 @@ class Frontend:
       resp = str(new_val)
       return Response(resp, status=200, mimetype='text/plain')
     except KeyError as e:
-      return Response(e, status=404, mimetype='text/plain')
+      return Response(str(e), status=404, mimetype='text/plain')
 
   def decr(self, key):
     try:
@@ -95,7 +95,7 @@ class Frontend:
       resp = str(new_val)
       return Response(resp, status=200, mimetype='text/plain')
     except KeyError as e:
-      return Response(e, status=404, mimetype='text/plain')
+      return Response(str(e), status=404, mimetype='text/plain')
 
 
   # def put(self, key, value):

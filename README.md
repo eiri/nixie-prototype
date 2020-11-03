@@ -1,11 +1,23 @@
 # Nixie
 
 ![project: prototype](https://img.shields.io/badge/project-prototype-orange.svg)
-[![Build Status](https://travis-ci.org/eiri/nixie-prototype.svg?branch=master)](https://travis-ci.org/eiri/nixie-prototype)
+[![Build Status](https://github.com/eiri/nixie-prototype/actions)](https://github.com/eiri/nixie-prototype/workflows/build/badge.svg)
 
 ## Overview
 
 Service that allows to create, update and delete counters.
+
+## tl;dr
+
+```bash
+$ python3 -m venv venv
+$ . ./venv/bin/activate
+$ python3 -m pip install --upgrade pip
+$ pip3 install -r requirements.txt
+$ pip3 install pytest
+$ pytest
+$ ./bin/nixie-server -d
+```
 
 ## Setup
 Make and activate venv. Then `pip install -r requirements.txt`

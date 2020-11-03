@@ -43,6 +43,6 @@ class RingBufferTestCase(unittest.TestCase):
 
   def test_length(self):
     self.assertEqual(len(self.trb), 0)
-    for i in xrange(9):
+    for i in range(9):
       self.trb.append(i)
     self.assertEqual(len(self.trb), 3)

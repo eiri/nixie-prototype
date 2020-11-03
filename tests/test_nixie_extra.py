@@ -1,5 +1,6 @@
 import unittest
 from nixie.core import Nixie
+from collections import KeysView
 
 class NixieExtraTestCase(unittest.TestCase):
 
@@ -10,7 +11,7 @@ class NixieExtraTestCase(unittest.TestCase):
     nx.create()
     nx.create()
     keys = nx.list()
-    self.assertIsInstance(keys, list)
+    self.assertIsInstance(keys, KeysView)
     [self.assertRegexpMatches(key, self.regexp) for key in keys]
 
   def test_exists(self):
