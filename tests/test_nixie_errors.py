@@ -1,5 +1,5 @@
 import unittest, uuid
-from nixie.core import Nixie
+from nixie.core import Nixie, KeyError
 
 class NixieErrorsTestCase(unittest.TestCase):
 

@@ -3,7 +3,7 @@ from nixie.frontend import Frontend
 
 class FrontendTestCase(unittest.TestCase):
 
-  regexp = '[a-f0-9]{32}'
+  regexp = b'[a-f0-9]{32}'
 
   def setUp(self):
     fe = Frontend()
@@ -22,7 +22,7 @@ class FrontendTestCase(unittest.TestCase):
     resp = self.app.get(url)
     self.assertEqual(resp.status_code, 200)
     self.assertTrue(resp.headers['Content-Type'].startswith('text/plain'))
-    self.assertEqual(resp.data, '0')
+    self.assertEqual(resp.data, b'0')
 
   def test_update_incr(self):
     key = self.get_key()
@@ -30,11 +30,11 @@ class FrontendTestCase(unittest.TestCase):
     resp = self.app.put(url)
     self.assertEqual(resp.status_code, 200)
     self.assertTrue(resp.headers['Content-Type'].startswith('text/plain'))
-    self.assertEqual(resp.data, '12')
+    self.assertEqual(resp.data, b'12')
     resp = self.app.put(url)
     self.assertEqual(resp.status_code, 200)
     self.assertTrue(resp.headers['Content-Type'].startswith('text/plain'))
-    self.assertEqual(resp.data, '24')
+    self.assertEqual(resp.data, b'24')
 
   def test_update_decr(self):
     key = self.get_key()
@@ -43,11 +43,11 @@ class FrontendTestCase(unittest.TestCase):
     resp = self.app.put(url)
     self.assertEqual(resp.status_code, 200)
     self.assertTrue(resp.headers['Content-Type'].startswith('text/plain'))
-    self.assertEqual(resp.data, '11')
+    self.assertEqual(resp.data, b'11')
     resp = self.app.put(url)
     self.assertEqual(resp.status_code, 200)
     self.assertTrue(resp.headers['Content-Type'].startswith('text/plain'))
-    self.assertEqual(resp.data, '5')
+    self.assertEqual(resp.data, b'5')
 
   def test_delete(self):
     key = self.get_key()
@@ -60,4 +60,4 @@ class FrontendTestCase(unittest.TestCase):
   def get_key(self):
     self.app.post('/')
     resp = self.app.get('/')
-    return resp.data
+    return resp.data.decode("utf-8")

@@ -7,6 +7,18 @@
 
 Service that allows to create, update and delete counters.
 
+## tl;dr
+
+```bash
+$ python3 -m venv venv
+$ . ./venv/bin/activate
+$ python3 -m pip install --upgrade pip
+$ pip3 install -r requirements.txt
+$ pip3 install pytest
+$ pytest
+$ ./bin/nixie-server -d
+```
+
 ## Setup
 Make and activate venv. Then `pip install -r requirements.txt`
 

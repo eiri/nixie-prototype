@@ -1,4 +1,4 @@
-import backend
+import nixie.backend as backend
 
 class Nixie:
   """Core API library"""
@@ -48,7 +48,7 @@ class Nixie:
   def __validate_key_value(self, key, value):
     if not key in self.storage:
       raise KeyError('Unknown key {}'.format(key))
-    if (isinstance(value, (int, long))
+    if (isinstance(value, int)
         or value.isdigit()
         or (value[0] in ['-', '+'] and value[1:].isdigit())):
       return True
@@ -56,11 +56,11 @@ class Nixie:
       raise ValueError('Invalid value {}'.format(value))
 
 
-  class KeyError(Exception):
-    """Custom error on missing key"""
+class KeyError(Exception):
+  """Custom error on missing key"""
 
-    def __init__(self, value):
-      self.value = value
+  def __init__(self, value):
+    self.value = value
 
-    def __str__(self):
-      return repr(self.value)
+  def __str__(self):
+    return self.value
