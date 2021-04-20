@@ -41,7 +41,7 @@ $ ./bin/nixie-cli -d
  * Debugger is active!
  * Debugger PIN: 140-209-625
 127.0.0.1 - - [03/Nov/2017 11:20:36] "POST / HTTP/1.1" 201 -
-127.0.0.1 - - [03/Nov/2017 11:20:45] "GET /0e0d53f462784748a54f7526f265fc92 HTTP/1.1" 200 -
+127.0.0.1 - - [03/Nov/2017 11:20:45] "GET /7ybcVEkCLNcdD9X3zGMid HTTP/1.1" 200 -
 ...
 ```
 

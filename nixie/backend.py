@@ -1,4 +1,6 @@
-import uuid, collections, time
+import collections, time
+
+from nanoid import generate
 
 class Backend(collections.MutableMapping):
   """Dict-like storage for counters"""
@@ -7,7 +9,7 @@ class Backend(collections.MutableMapping):
     self.store = dict()
 
   def new(self, buffer_size=5):
-    key = uuid.uuid4().hex
+    key = generate('346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz')
     if key in self.store:
       raise ValueError('key collision')
     self.store[key] = TimedRingBuffer(buffer_size)

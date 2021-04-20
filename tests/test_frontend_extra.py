@@ -3,7 +3,7 @@ from nixie.frontend import Frontend
 
 class FrontendTestCase(unittest.TestCase):
 
-  regexp = b'[a-f0-9]{32}'
+  regexp = b'\w{21}'
 
   def setUp(self):
     fe = Frontend()

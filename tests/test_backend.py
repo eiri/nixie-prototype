@@ -3,7 +3,7 @@ from nixie.backend import Backend
 
 class BackendTestCase(unittest.TestCase):
 
-  regexp = '[a-f0-9]{32}'
+  regexp = '\w{21}'
 
   def setUp(self):
     self.be = Backend()

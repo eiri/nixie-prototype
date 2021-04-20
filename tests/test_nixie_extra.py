@@ -4,7 +4,7 @@ from collections import KeysView
 
 class NixieExtraTestCase(unittest.TestCase):
 
-  regexp = '[a-f0-9]{32}'
+  regexp = '\w{21}'
 
   def test_list(self):
     nx = Nixie()

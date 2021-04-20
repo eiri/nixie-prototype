@@ -3,7 +3,7 @@ from nixie.backend import TimedRingBuffer
 
 class RingBufferTestCase(unittest.TestCase):
 
-  regexp = '[a-f0-9]{32}'
+  regexp = '\w{21}'
 
   def setUp(self):
     self.trb = TimedRingBuffer(3)

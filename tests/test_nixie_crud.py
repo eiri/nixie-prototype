@@ -3,7 +3,7 @@ from nixie.core import Nixie
 
 class NixieCRUDTestCase(unittest.TestCase):
 
-  regexp = '[a-f0-9]{32}'
+  regexp = '\w{21}'
 
   def test_create(self):
     nx = Nixie()
