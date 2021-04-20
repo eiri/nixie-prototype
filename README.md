@@ -16,7 +16,7 @@ $ python3 -m pip install --upgrade pip
 $ pip3 install -r requirements.txt
 $ pip3 install pytest
 $ pytest
-$ ./bin/nixie-server -d
+$ ./bin/nixie-cli -d
 ```
 
 ## Setup
@@ -24,17 +24,18 @@ Make and activate venv. Then `pip install -r requirements.txt`
 
 ## Run server
 ```bash
-$ ./bin/nixie-server -h
-usage: nixie-server [-h] [-p PORT] [-d]
+$ ./bin/nixie-cli -h
+Usage: nixie-cli [OPTIONS]
 
-Start nixie server
+  Start Nixie server
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -p PORT, --port PORT
-  -d, --debug
+Options:
+  --version           Show the version and exit.
+  -p, --port INTEGER  server port
+  -d, --debug         run server in debug mode
+  -h, --help          Show this message and exit.
 
-$ ./bin/nixie-server -d
+$ ./bin/nixie-cli -d
  * Running on http://127.0.0.1:7312/ (Press CTRL+C to quit)
  * Restarting with stat
  * Debugger is active!
