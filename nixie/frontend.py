@@ -1,4 +1,5 @@
-from flask import Flask, Response, request
+from sanic import Sanic, exceptions
+from sanic.response import text, empty
 from nixie.core import Nixie, KeyError
 
 class Frontend:
@@ -6,7 +7,8 @@ class Frontend:
 
   def __init__(self):
     self.nx = Nixie()
-    self.app = Flask(__name__.split('.')[0])
+    self.app = Sanic(__name__.split('.')[0])
+    self.app.config.FALLBACK_ERROR_FORMAT = "text"
     self.__set_rules()
     return None
 
@@ -14,91 +16,78 @@ class Frontend:
     self.app.run(port=port, debug=debug)
 
   def __set_rules(self):
-    self.app.add_url_rule('/', 'list', self.list)
-    self.app.add_url_rule('/', 'create', self.create, methods=['POST'])
-    self.app.add_url_rule('/<key>', 'exists', self.exists, methods=['HEAD'])
-    self.app.add_url_rule('/<key>', 'read', self.read)
-    self.app.add_url_rule('/<key>/incr', 'incr', self.incr, methods=['PUT'])
-    self.app.add_url_rule('/<key>/incr/<val>', 'incr_val', self.update,
-      methods=['PUT'])
-    self.app.add_url_rule('/<key>/decr', 'decr', self.decr, methods=['PUT'])
-    self.app.add_url_rule('/<key>/decr/<val>', 'decr_val', self.update,
-      methods=['PUT'])
-    self.app.add_url_rule('/<key>/<val>', 'put', self.put, methods=['PUT'])
-    self.app.add_url_rule('/<key>', 'delete', self.delete, methods=['DELETE'])
+    self.app.add_route(self.list, '/', methods=['GET'])
+    self.app.add_route(self.create, '/', methods=['POST'], )
+    self.app.add_route(self.exists, '/<key>', methods=['HEAD'])
+    self.app.add_route(self.read, '/<key>', methods=['GET'])
+    # self.app.add_route(self.put, '/<key:string>/<val:int>', methods=['PUT'])
+    self.app.add_route(self.incr, '/<key>/incr', methods=['PUT'])
+    self.app.add_route(self.decr, '/<key>/decr', methods=['PUT'])
+    self.app.add_route(self.update, '/<key>/incr/<val:int>', methods=['PUT'])
+    self.app.add_route(self.update, '/<key>/decr/<val:int>', methods=['PUT'])
+    self.app.add_route(self.delete, '/<key>', methods=['DELETE'])
 
   """CRUD"""
-  def create(self):
+  async def create(self, request):
     key = self.nx.create()
-    return Response(key, status=201, mimetype='text/plain')
+    return text(key, status=201)
 
-  def read(self, key):
+  async def read(self, request, key):
     val = self.nx.read(key)
     if val is None:
-      return Response('', status=404, mimetype='text/plain')
+      raise exceptions.NotFound(f'Not Found')
     else:
-      resp = str(val)
-      return Response(resp, status=200, mimetype='text/plain')
+      return text(f'{val}')
 
-  def update(self, key, val):
+  async def update(self, request, key, val):
     try:
-      if request.url_rule.endpoint == 'decr_val':
-        val = '-' + val
+      if 'decr' in request.path:
+        val = -1 * val
       new_val = self.nx.update(key, val)
-      resp = str(new_val)
-      return Response(resp, status=200, mimetype='text/plain')
+      return text(f'{new_val}')
     except KeyError as e:
-      return Response(str(e), status=404, mimetype='text/plain')
+      raise exceptions.NotFound(f'{e}')
     except ValueError as e:
-      return Response(str(e), status=400, mimetype='text/plain')
+      raise exceptions.InvalidUsage(f'{e}')
 
-  def delete(self, key):
+  async def delete(self, request, key):
     try:
       self.nx.delete(key)
-      return Response('', status=204, mimetype='text/plain')
+      return empty()
     except KeyError as e:
-      return Response(str(e), status=404, mimetype='text/plain')
+      raise exceptions.NotFound(f'{e}')
 
   """extra"""
-  def exists(self, key):
+  async def exists(self, request, key):
     if self.nx.exists(key):
-      return Response('', status=200, mimetype='text/plain')
+      return empty()
     else:
-      return Response('', status=404, mimetype='text/plain')
+      raise exceptions.NotFound(f'Not Found')
 
-  def list(self):
+  async def list(self, request):
     keys = self.nx.list()
     resp =  '\n'.join(keys)
-    return Response(resp, mimetype='text/plain')
+    return text(resp)
 
-  def put(self, key, val):
+  async def put(self, request, key, val):
     try:
       new_val = self.nx.put(key, val)
-      resp = str(new_val)
-      return Response(resp, status=200, mimetype='text/plain')
+      return text(f'{new_val}')
     except KeyError as e:
-      return Response(str(e), status=404, mimetype='text/plain')
+      raise exceptions.NotFound(f'{e}')
     except ValueError as e:
-      return Response(str(e), status=400, mimetype='text/plain')
+      raise exceptions.InvalidUsage(f'{e}')
 
-  def incr(self, key):
+  async def incr(self, request, key):
     try:
       new_val = self.nx.incr(key)
-      resp = str(new_val)
-      return Response(resp, status=200, mimetype='text/plain')
+      return text(f'{new_val}')
     except KeyError as e:
-      return Response(str(e), status=404, mimetype='text/plain')
+      raise exceptions.NotFound(f'{e}')
 
-  def decr(self, key):
+  async def decr(self, request, key):
     try:
       new_val = self.nx.decr(key)
-      resp = str(new_val)
-      return Response(resp, status=200, mimetype='text/plain')
+      return text(f'{new_val}')
     except KeyError as e:
-      return Response(str(e), status=404, mimetype='text/plain')
-
-
-  # def put(self, key, value):
-  #   self.__validate_key_value(key, value)
-  #   self.storage[key] = int(value)
-  #   return self.storage[key]
+      raise exceptions.NotFound(f'{e}')

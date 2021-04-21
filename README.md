@@ -57,7 +57,6 @@ $ ./bin/nixie-cli -d
 | `PUT`    | `/{key}/incr/{val}` | increase counter by val |
 | `PUT`    | `/{key}/decr`       | decrease counter by 1   |
 | `PUT`    | `/{key}/decr/{val}` | decrease counter by val |
-| `PUT`    | `/{key}/{val}`      | set counter to val      |
 | `DELETE` | `/{key}`            | delete counter          |
 
 _Note: Content-Type for all the requests is `text/plain`_
