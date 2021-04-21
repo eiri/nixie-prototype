@@ -1,8 +1,9 @@
 import collections, time
 
+from collections.abc import MutableMapping
 from nanoid import generate
 
-class Backend(collections.MutableMapping):
+class Backend(MutableMapping):
   """Dict-like storage for counters"""
 
   def __init__(self):

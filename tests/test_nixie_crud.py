@@ -3,14 +3,14 @@ from nixie.core import Nixie
 
 class NixieCRUDTestCase(unittest.TestCase):
 
-  regexp = '\w{21}'
+  regexp = r'\w{21}'
 
   def test_create(self):
     nx = Nixie()
     key1 = nx.create()
     key2 = nx.create()
-    self.assertRegexpMatches(key1, self.regexp)
-    self.assertRegexpMatches(key2, self.regexp)
+    self.assertRegex(key1, self.regexp)
+    self.assertRegex(key2, self.regexp)
     self.assertNotEqual(key1, key2)
 
   def test_read(self):

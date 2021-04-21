@@ -3,7 +3,7 @@ from nixie.frontend import Frontend
 
 class FrontendTestCase(unittest.TestCase):
 
-  regexp = b'\w{21}'
+  regexp = br'\w{21}'
 
   def setUp(self):
     fe = Frontend()
@@ -13,7 +13,7 @@ class FrontendTestCase(unittest.TestCase):
     req, resp = self.app.post('/')
     self.assertEqual(resp.status, 201)
     self.assertTrue(resp.headers['Content-Type'].startswith('text/plain'))
-    self.assertRegexpMatches(resp.body, self.regexp)
+    self.assertRegex(resp.body, self.regexp)
 
   def test_read(self):
     key = self.get_key()

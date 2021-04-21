@@ -1,10 +1,10 @@
 import unittest
 from nixie.core import Nixie
-from collections import KeysView
+from collections.abc import KeysView
 
 class NixieExtraTestCase(unittest.TestCase):
 
-  regexp = '\w{21}'
+  regexp = r'\w{21}'
 
   def test_list(self):
     nx = Nixie()
@@ -12,7 +12,8 @@ class NixieExtraTestCase(unittest.TestCase):
     nx.create()
     keys = nx.list()
     self.assertIsInstance(keys, KeysView)
-    [self.assertRegexpMatches(key, self.regexp) for key in keys]
+    for key in keys:
+      self.assertRegex(key, self.regexp)
 
   def test_exists(self):
     nx = Nixie()

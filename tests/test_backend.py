@@ -3,14 +3,14 @@ from nixie.backend import Backend
 
 class BackendTestCase(unittest.TestCase):
 
-  regexp = '\w{21}'
+  regexp = r'\w{21}'
 
   def setUp(self):
     self.be = Backend()
     self.key = self.be.new()
 
   def test_new(self):
-    self.assertRegexpMatches(self.key, self.regexp)
+    self.assertRegex(self.key, self.regexp)
 
   def test_read(self):
     self.assertEqual(self.be[self.key], 0)
