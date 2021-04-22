@@ -10,11 +10,10 @@ Service that allows to create, update and delete counters.
 ## tl;dr
 
 ```bash
-$ python3 -m venv venv
+$ python -m venv venv
 $ . ./venv/bin/activate
-$ python3 -m pip install --upgrade pip
-$ pip3 install -r requirements.txt
-$ pip3 install pytest
+$ python -m pip install --upgrade pip
+$ pip install -r requirements.txt
 $ pytest
 $ ./bin/nixie-cli -d
 ```

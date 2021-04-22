@@ -50,7 +50,7 @@ class Backend(MutableMapping):
 
 
 class TimedRingBuffer:
-  """Circular buffer with timestamped enties"""
+  """Circular buffer with timestamped entries"""
 
   def __init__(self, maxlen):
     self.data = collections.deque(maxlen=maxlen)
