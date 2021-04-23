@@ -46,23 +46,21 @@ $ ./bin/nixie-cli -d
 
 ### REST API
 
-| Method   | Path                | Description             |
-| -------- | ------------------- | ----------------------- |
-| `GET`    | `/`                 | list of counters        |
-| `POST`   | `/`                 | create new counter      |
-| `HEAD`   | `/{key}`            | check if counter exists |
-| `GET`    | `/{key}`            | read counter            |
-| `PUT`    | `/{key}/incr`       | increase counter by 1   |
-| `PUT`    | `/{key}/incr/{val}` | increase counter by val |
-| `PUT`    | `/{key}/decr`       | decrease counter by 1   |
-| `PUT`    | `/{key}/decr/{val}` | decrease counter by val |
-| `DELETE` | `/{key}`            | delete counter          |
+| Method   | Path     | Description
+| -------- | -------- | -----------------------
+| `GET`    | `/`      | List all counters' keys.
+| `POST`   | `/`      | Create a new coutner.
+| `HEAD`   | `/{key}` | Check if a specific counter exists.
+| `GET`    | `/{key}` | Return a value of a specific counter.
+| `POST`   | `/{key}` | Increase or decrease a specific counter on its step and return an updated value.
+| `PATCH`  | `/{key}` | Update metadata for a specific counter.
+| `DELETE` | `/{key}` | Delete a specific counter.
 
-_Note: Content-Type for all the requests is `text/plain`_
+For more details read [OpenAPI specs](https://github.com/eiri/nixie-prototype/blob/master/openapi.yaml "OpenAPI specs")
 
 ## Run tests
 `pytest`
 
 ## License
 
-[MIT](https://github.com/eiri/nixie/blob/master/LICENSE "MIT License")
+[MIT](https://github.com/eiri/nixie-prototype/blob/master/LICENSE "MIT License")
