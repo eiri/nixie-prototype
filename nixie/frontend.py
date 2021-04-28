@@ -2,7 +2,7 @@ from sanic import Sanic, exceptions
 from sanic.response import text, empty
 from sanic.views import HTTPMethodView
 
-from nixie.core import Nixie, KeyError
+from nixie.api import Nixie, KeyError
 
 class NixieRootView(HTTPMethodView):
   """View for Nixie root end-point"""
@@ -29,11 +29,11 @@ class NixieCounterView(HTTPMethodView):
     super().__init__()
 
   async def get(self, request, key):
-    val = self.nx.read(key)
-    if val is None:
-      raise exceptions.NotFound(f'Not Found')
-    else:
+    try:
+      val = self.nx.read(key)
       return text(f'{val}')
+    except KeyError as e:
+      raise exceptions.NotFound(f'Not Found')
 
   async def head(self, request, key):
     if self.nx.exists(key):
@@ -43,7 +43,7 @@ class NixieCounterView(HTTPMethodView):
 
   async def post(self, request, key):
     try:
-      new_val = self.nx.incr(key)
+      new_val = self.nx.next(key)
       return text(f'{new_val}')
     except KeyError as e:
       raise exceptions.NotFound(f'{e}')

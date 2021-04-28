@@ -12,14 +12,13 @@ class Nixie:
     return key
 
   def read(self, key):
-    if key in self.storage:
-      return self.storage[key]
-    else:
-      return None
+    if not key in self.storage:
+      raise KeyError('Unknown key {}'.format(key))
+    return self.storage[key]
 
-  def update(self, key, value=1):
+  def update(self, key, value):
     self.__validate_key_value(key, value)
-    self.storage[key] += int(value)
+    self.storage[key] = int(value)
     return self.storage[key]
 
   def delete(self, key):
@@ -34,16 +33,12 @@ class Nixie:
   def list(self):
     return self.storage.keys()
 
-  def put(self, key, value):
-    self.__validate_key_value(key, value)
-    self.storage[key] = int(value)
+  def next(self, key):
+    if not key in self.storage:
+      raise KeyError('Unknown key {}'.format(key))
+    i = iter(self.storage.counter(key))
+    next(i)
     return self.storage[key]
-
-  def incr(self, key):
-    return self.update(key)
-
-  def decr(self, key):
-    return self.update(key, -1)
 
   def __validate_key_value(self, key, value):
     if not key in self.storage:
