@@ -41,6 +41,12 @@ class APITestCase(unittest.TestCase):
     with self.assertRaises(KeyError):
       nx.update('missing', 5)
 
+  def test_update_invalid(self):
+    nx = Nixie()
+    key1 = nx.create()
+    with self.assertRaises(ValueError):
+      nx.update(key1, 'boom')
+
   def test_delete(self):
     nx = Nixie()
     key1 = nx.create()

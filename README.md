@@ -59,7 +59,14 @@ $ ./bin/nixie-cli -d
 For more details read [OpenAPI specs](https://github.com/eiri/nixie-prototype/blob/master/openapi.yaml "OpenAPI specs")
 
 ## Run tests
-`pytest`
+
+Short `pytest`
+
+Single suite and verbose `pytest tests/test_api.py -sv`
+
+All with coverage `pytest --cov=nixie`
+
+All with coverage and html report `pytest --cov=nixie --cov-report html`
 
 ## License
 

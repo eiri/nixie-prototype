@@ -30,6 +30,11 @@ class RingBufferTestCase(unittest.TestCase):
     self.assertTrue('length: 3' in str(trb))
     self.assertEqual(len(trb), 3)
 
+  def test_repr(self):
+    trb = TimedRingBuffer(3)
+    self.assertTrue(repr(trb).startswith('nixie.TimedRingBuffer'))
+
+
 class CounterTestCase(unittest.TestCase):
 
   def setUp(self):
@@ -113,6 +118,9 @@ class CounterTestCase(unittest.TestCase):
     self.c.value = 12
     self.assertTrue('value: 12' in str(self.c))
 
+  def test_repr(self):
+    self.assertTrue(repr(self.c).startswith('nixie.Counter'))
+
 
 class BackendTestCase(unittest.TestCase):
 
@@ -150,3 +158,6 @@ class BackendTestCase(unittest.TestCase):
 
   def test_str(self):
     self.assertTrue(str(self.be).startswith('nixie.Backend'))
+
+  def test_repr(self):
+    self.assertTrue(repr(self.be).startswith('nixie.Backend'))
