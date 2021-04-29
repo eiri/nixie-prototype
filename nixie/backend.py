@@ -34,10 +34,12 @@ class TimedRingBuffer:
 class Counter:
   """Class representing a counter"""
 
-  def __init__(self, start=0, step=1):
+  def __init__(self, start=0, step=1, name=None, description=None):
     Counter.value = TimedRingBuffer()
     Counter.value = start
     self.step = step
+    self.name = name
+    self.description = description
 
   def __add__(self, other):
     return self.value + other

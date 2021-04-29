@@ -112,6 +112,12 @@ class CounterTestCase(unittest.TestCase):
         break
       self.assertEqual(self.c.value, i + self.c.step)
 
+  def test_meta(self):
+    c = Counter(2, 3, 'custom name', 'custom description')
+    self.assertEqual(c.step, 3)
+    self.assertEqual(c.name, 'custom name')
+    self.assertEqual(c.description, 'custom description')
+
   def test_str(self):
     self.assertTrue(str(self.c).startswith('nixie.Counter'))
     self.assertTrue('value: 0' in str(self.c))
