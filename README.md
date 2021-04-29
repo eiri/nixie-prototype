@@ -1,6 +1,6 @@
 # Nixie
 
-![project: prototype](https://img.shields.io/badge/project-prototype-orange.svg)
+![project: prototype](https://img.shields.io/badge/project-prototype%3A2.0-orange)
 [![Build Status](https://github.com/eiri/nixie-prototype/workflows/build/badge.svg)](https://github.com/eiri/nixie-prototype/actions)
 
 ## Overview
