@@ -28,6 +28,13 @@ paths:
       tags:
       - root
       summary: Create a new coutner.
+      requestBody:
+        description: An initial value for a specific counter.
+        required: false
+        content:
+          text/plain:
+            schema:
+              $ref: "#/components/schemas/Counter"
       parameters:
       - name: Nixie-Name
         in: header
