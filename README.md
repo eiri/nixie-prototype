@@ -1,6 +1,6 @@
 # Nixie
 
-![project: prototype](https://img.shields.io/badge/project-prototype-orange.svg)
+![project: prototype](https://img.shields.io/badge/project-prototype%3A2.0-orange)
 [![Build Status](https://github.com/eiri/nixie-prototype/workflows/build/badge.svg)](https://github.com/eiri/nixie-prototype/actions)
 
 ## Overview
@@ -10,13 +10,12 @@ Service that allows to create, update and delete counters.
 ## tl;dr
 
 ```bash
-$ python3 -m venv venv
+$ python -m venv venv
 $ . ./venv/bin/activate
-$ python3 -m pip install --upgrade pip
-$ pip3 install -r requirements.txt
-$ pip3 install pytest
+$ python -m pip install --upgrade pip
+$ pip install -r requirements.txt
 $ pytest
-$ ./bin/nixie-server -d
+$ ./bin/nixie-cli -d
 ```
 
 ## Setup
@@ -24,46 +23,51 @@ Make and activate venv. Then `pip install -r requirements.txt`
 
 ## Run server
 ```bash
-$ ./bin/nixie-server -h
-usage: nixie-server [-h] [-p PORT] [-d]
+$ ./bin/nixie-cli -h
+Usage: nixie-cli [OPTIONS]
 
-Start nixie server
+  Start Nixie server
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -p PORT, --port PORT
-  -d, --debug
+Options:
+  --version           Show the version and exit.
+  -p, --port INTEGER  server port
+  -d, --debug         run server in debug mode
+  -h, --help          Show this message and exit.
 
-$ ./bin/nixie-server -d
+$ ./bin/nixie-cli -d
  * Running on http://127.0.0.1:7312/ (Press CTRL+C to quit)
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 140-209-625
 127.0.0.1 - - [03/Nov/2017 11:20:36] "POST / HTTP/1.1" 201 -
-127.0.0.1 - - [03/Nov/2017 11:20:45] "GET /0e0d53f462784748a54f7526f265fc92 HTTP/1.1" 200 -
+127.0.0.1 - - [03/Nov/2017 11:20:45] "GET /7ybcVEkCLNcdD9X3zGMid HTTP/1.1" 200 -
 ...
 ```
 
 ### REST API
 
-| Method   | Path                | Description             |
-| -------- | ------------------- | ----------------------- |
-| `GET`    | `/`                 | list of counters        |
-| `POST`   | `/`                 | create new counter      |
-| `HEAD`   | `/{key}`            | check if counter exists |
-| `GET`    | `/{key}`            | read counter            |
-| `PUT`    | `/{key}/incr`       | increase counter by 1   |
-| `PUT`    | `/{key}/incr/{val}` | increase counter by val |
-| `PUT`    | `/{key}/decr`       | decrease counter by 1   |
-| `PUT`    | `/{key}/decr/{val}` | decrease counter by val |
-| `PUT`    | `/{key}/{val}`      | set counter to val      |
-| `DELETE` | `/{key}`            | delete counter          |
+| Method   | Path     | Description
+| -------- | -------- | -----------------------
+| `GET`    | `/`      | List all counters' keys.
+| `POST`   | `/`      | Create a new coutner.
+| `HEAD`   | `/{key}` | Check if a specific counter exists.
+| `GET`    | `/{key}` | Return a value of a specific counter.
+| `POST`   | `/{key}` | Increase or decrease a specific counter on its step and return an updated value.
+| `PATCH`  | `/{key}` | Update metadata for a specific counter.
+| `DELETE` | `/{key}` | Delete a specific counter.
 
-_Note: Content-Type for all the requests is `text/plain`_
+For more details read [OpenAPI specs](https://github.com/eiri/nixie-prototype/blob/master/openapi.yaml "OpenAPI specs")
 
 ## Run tests
-`pytest`
+
+Short `pytest`
+
+Single suite and verbose `pytest tests/test_api.py -sv`
+
+All with coverage `pytest --cov=nixie`
+
+All with coverage and html report `pytest --cov=nixie --cov-report html`
 
 ## License
 
-[MIT](https://github.com/eiri/nixie/blob/master/LICENSE "MIT License")
+[MIT](https://github.com/eiri/nixie-prototype/blob/master/LICENSE "MIT License")

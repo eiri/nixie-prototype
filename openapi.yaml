@@ -1,0 +1,258 @@
+openapi: "3.0.3"
+info:
+  version: 2.0.0
+  title: Nixie
+  description: A service that allows to create, update and delete counters.
+  contact:
+    name: Eric Avdey
+    url: https://github.com/eiri
+  license:
+    name: MIT
+    url: https://github.com/eiri/nixie-prototype/blob/master/LICENSE
+paths:
+  /:
+    get:
+      tags:
+      - root
+      summary: List all counters' keys.
+      responses:
+        200:
+          description: A list of counter keys
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Keys"
+        500:
+          $ref: "#/components/responses/500"
+    post:
+      tags:
+      - root
+      summary: Create a new coutner.
+      requestBody:
+        description: An initial value for a specific counter.
+        required: false
+        content:
+          text/plain:
+            schema:
+              $ref: "#/components/schemas/Counter"
+      parameters:
+      - name: Nixie-Name
+        in: header
+        required: true
+        description: A human friendly name of the counter.
+        schema:
+          type: string
+        example: "new-response-ok"
+      - name: Nixie-Description
+        in: header
+        description: A short description of the counter
+        schema:
+          type: string
+          default: ""
+        example: "New counter of successful responses"
+      - name: Nixie-Step
+        in: header
+        description: An increase or decrease step of the counter
+        schema:
+          type: integer
+          format: int64
+          default: 1
+        example: 4
+      responses:
+        201:
+          $ref: "#/components/responses/201"
+        500:
+          $ref: "#/components/responses/500"
+  /{key}:
+    parameters:
+    - name: key
+      in: path
+      required: true
+      description: The key of a specific counter.
+      schema:
+        $ref: "#/components/schemas/Key"
+    head:
+      tags:
+      - counter
+      - meta
+      summary: Check if a specific counter exists.
+      responses:
+        204:
+          $ref: "#/components/responses/204"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+    get:
+      tags:
+      - counter
+      - meta
+      summary: Return a value of a specific counter.
+      responses:
+        200:
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+    post:
+      tags:
+      - counter
+      summary: Increase or decrease a specific counter on its step and return an updated value.
+      responses:
+        200:
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+      - counter
+      summary: Set a specific counter to a given value.
+      requestBody:
+        description: A new value for a specific counter.
+        required: true
+        content:
+          text/plain:
+            schema:
+              $ref: "#/components/schemas/Counter"
+      responses:
+        204:
+          $ref: "#/components/responses/204"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+    patch:
+      tags:
+      - meta
+      summary: Update metadata for a specific counter.
+      parameters:
+      - name: Nixie-Name
+        in: header
+        description: A human friendly name of the counter.
+        schema:
+          type: string
+        example: "new-response-ok"
+      - name: Nixie-Description
+        in: header
+        description: A short description of the counter
+        schema:
+          type: string
+        example: "New counter of successful responses"
+      - name: Nixie-Step
+        in: header
+        description: An increase or decrease step of the counter
+        schema:
+          type: integer
+          format: int64
+        example: 4
+      responses:
+        204:
+          $ref: "#/components/responses/204"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+    delete:
+      tags:
+      - counter
+      summary: Delete a specific counter.
+      responses:
+        204:
+          $ref: "#/components/responses/204"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+components:
+  schemas:
+    Key:
+      type: string
+      example: "H887THUcqHcPJDjPqw6gX"
+    Counter:
+      type: integer
+      format: int64
+      example: 12
+    Keys:
+      type: array
+      items:
+        $ref: "#/components/schemas/Key"
+      example: |-
+        H887THUcqHcPJDjPqw6gX
+        zwAUhYjLAb7p4Qxc6iHFd
+        nm3kUNrG8DyJzWpgVdhRf
+    Error:
+      type: string
+  headers:
+    Nixie-Name:
+      description: A human friendly name of the counter
+      schema:
+        type: string
+      example: "response-ok"
+    Nixie-Description:
+      description: A short description of the counter
+      schema:
+        type: string
+      example: "Counter of successful responses"
+    Nixie-Step:
+      description: An increase or decrease step of the counter
+      schema:
+        type: integer
+        format: int64
+      examples:
+        increase:
+          value: 2
+        decrease:
+          value: -2
+  responses:
+    200:
+      description: Expected response to a valid request
+      headers:
+        Nixie-Name:
+          $ref: "#/components/headers/Nixie-Name"
+        Nixie-Description:
+          $ref: "#/components/headers/Nixie-Description"
+        Nixie-Step:
+          $ref: "#/components/headers/Nixie-Step"
+      content:
+        text/plain:
+          schema:
+            $ref: "#/components/schemas/Counter"
+    201:
+      description: Created
+      headers:
+        Nixie-Name:
+          $ref: "#/components/headers/Nixie-Name"
+        Nixie-Description:
+          $ref: "#/components/headers/Nixie-Description"
+        Nixie-Step:
+          $ref: "#/components/headers/Nixie-Step"
+      content:
+        text/plain:
+          schema:
+            $ref: "#/components/schemas/Key"
+    204:
+      description: No Content
+      headers:
+        Nixie-Name:
+          $ref: "#/components/headers/Nixie-Name"
+        Nixie-Description:
+          $ref: "#/components/headers/Nixie-Description"
+        Nixie-Step:
+          $ref: "#/components/headers/Nixie-Step"
+    404:
+      description: Not Found
+      content:
+        text/plain:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example: "404 — Not Found"
+    500:
+      description: Internal Server Error
+      content:
+        text/plain:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example: "500 — Internal Server Error"
