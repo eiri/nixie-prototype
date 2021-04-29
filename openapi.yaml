@@ -222,6 +222,17 @@ components:
             $ref: "#/components/schemas/Counter"
     201:
       description: Created
+      headers:
+        Nixie-Name:
+          $ref: "#/components/headers/Nixie-Name"
+        Nixie-Description:
+          $ref: "#/components/headers/Nixie-Description"
+        Nixie-Step:
+          $ref: "#/components/headers/Nixie-Step"
+      content:
+        text/plain:
+          schema:
+            $ref: "#/components/schemas/Key"
     204:
       description: No Content
       headers:

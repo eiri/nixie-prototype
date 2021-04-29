@@ -50,7 +50,7 @@ class APITestCase(unittest.TestCase):
     with self.assertRaises(KeyError):
       self.nx.delete('missing')
 
-  def test_crud_none_default(self):
+  def test_crud_custom(self):
     key3 = self.nx.create(3, 3, "key3", "description of key3")
     self.assertRegex(key3, self.regexp)
     self.assertEqual(self.nx.read(key3), 3)
