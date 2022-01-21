@@ -23,6 +23,6 @@ sanic-routing==0.6.2
 sanic-testing==0.3.1
 sniffio==1.2.0
 toml==0.10.2
-ujson==4.0.2
+ujson==5.1.0
 uvloop==0.15.2
 websockets==8.1
