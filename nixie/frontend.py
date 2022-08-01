@@ -1,108 +1,156 @@
-from sanic import Sanic, exceptions
-from sanic.response import text, empty
-from sanic.views import HTTPMethodView
+from typing import Union
+
+from fastapi import FastAPI, Header, Request, Response, HTTPException
+from fastapi.responses import PlainTextResponse
 
 from nixie.api import Nixie, KeyError
 
+import uvicorn
+
+
 class FrontendHelper:
-  def get_headers(self, key):
-    meta = self.nx.read_meta(key)
-    headers = {'nixie-step': meta['step']}
-    if meta['name'] is not None:
-      headers['nixie-name'] = meta['name']
-    if meta['description'] is not None:
-      headers['nixie-description'] = meta['description']
-    return headers
-
-  def get_meta(self, request):
-    start, step, name, description = 0, 1, None, None
-    if request.body != b'':
-      start = int(request.body)
-    if 'nixie-step' in request.headers:
-      step = int(request.headers['nixie-step'])
-    if 'nixie-name' in request.headers:
-      name = request.headers['nixie-name']
-    if 'nixie-description' in request.headers:
-      description = request.headers['nixie-description']
-    return (start, step, name, description)
+    def get_headers(self, n: Nixie, key: str):
+        meta = n.read_meta(key)
+        headers = {}
+        for k, v in meta.items():
+            if v is not None:
+                headers[f'nixie-{k}'] = str(v)
+        return headers
 
 
-class NixieRootView(HTTPMethodView, FrontendHelper):
-  """View for Nixie root end-point"""
+class NixieRootView(FrontendHelper):
+    """View for Nixie root end-point"""
 
-  def __init__(self, nx):
-    self.nx = nx
-    super().__init__()
+    def __init__(self, nx):
+        self.nx = nx
+        super().__init__()
 
-  async def get(self, request):
-    keys = self.nx.list()
-    resp =  '\n'.join(keys)
-    return text(resp)
+    def read_keys(self):
+        keys = self.nx.list()
+        resp =  '\n'.join(keys)
+        return PlainTextResponse(resp)
 
-  async def post(self, request):
-    (start, step, name, description) = self.get_meta(request)
-    key = self.nx.create(start, step, name, description)
-    headers = self.get_headers(key)
-    return text(key, status=201, headers=headers)
+    async def create_counter(
+        self,
+        payload: Request,
+        nixie_step: Union[int, None] = Header(default=1),
+        nixie_name: Union[str, None] = Header(default=None),
+        nixie_description: Union[str, None] = Header(default=None)
+    ):
+        start = 0
+        body = await payload.body()
+        if body != b'':
+            start = int(body)
+        key = self.nx.create(start, nixie_step, nixie_name, nixie_description)
+        headers = self.get_headers(self.nx, key)
+        return PlainTextResponse(key, headers=headers, status_code=201)
 
 
-class NixieCounterView(HTTPMethodView, FrontendHelper):
-  """View for Nixie counter end-point"""
+class NixieCounterView(FrontendHelper):
+    """View for Nixie counter end-point"""
 
-  def __init__(self, nx):
-    self.nx = nx
-    super().__init__()
+    def __init__(self, nx):
+        self.nx = nx
+        super().__init__()
 
-  async def get(self, request, key):
-    try:
-      val = self.nx.read(key)
-      headers = self.get_headers(key)
-      return text(f'{val}', headers=headers)
-    except KeyError as e:
-      raise exceptions.NotFound(f'Not Found')
+    def read_counter(self, key):
+        try:
+            val = self.nx.read(key)
+            headers = self.get_headers(self.nx, key)
+            return PlainTextResponse(str(val), headers=headers)
+        except KeyError as e:
+            raise HTTPException(status_code=404, detail=f'{e}')
 
-  async def head(self, request, key):
-    if self.nx.exists(key):
-      headers = self.get_headers(key)
-      return empty(headers=headers)
-    else:
-      raise exceptions.NotFound(f'Not Found')
+    def check_counter(self, key):
+        if self.nx.exists(key):
+            headers = self.get_headers(self.nx, key)
+            return Response(headers=headers, status_code=204)
+        else:
+            raise HTTPException(status_code=404, detail=f'Key {key} not found')
 
-  async def post(self, request, key):
-    try:
-      new_val = self.nx.next(key)
-      headers = self.get_headers(key)
-      return text(f'{new_val}', headers=headers)
-    except KeyError as e:
-      raise exceptions.NotFound(f'{e}')
+    def update_counter(self, key):
+        try:
+            new_val = self.nx.next(key)
+            headers = self.get_headers(self.nx, key)
+            return PlainTextResponse(str(new_val), headers=headers)
+        except KeyError as e:
+            raise HTTPException(status_code=404, detail=f'{e}')
 
-  async def patch(self, request, key):
-    try:
-      (_, step, name, description) = self.get_meta(request)
-      self.nx.update_meta(key, step, name, description)
-      headers = self.get_headers(key)
-      return empty(headers=headers)
-    except KeyError as e:
-      raise exceptions.NotFound(f'{e}')
+    def update_counter_meta(
+        self,
+        key,
+        nixie_step: Union[int, None] = Header(default=1),
+        nixie_name: Union[str, None] = Header(default=None),
+        nixie_description: Union[str, None] = Header(default=None)
+    ):
+        try:
+            self.nx.update_meta(key, nixie_step, nixie_name, nixie_description)
+            headers = self.get_headers(self.nx, key)
+            return Response(headers=headers, status_code=204)
+        except KeyError as e:
+            raise HTTPException(status_code=404, detail=f'{e}')
 
-  async def delete(self, request, key):
-    try:
-      self.nx.delete(key)
-      return empty()
-    except KeyError as e:
-      raise exceptions.NotFound(f'{e}')
+    def delete_counter(self, key):
+        try:
+            self.nx.delete(key)
+            return Response(status_code=204)
+        except KeyError as e:
+            raise HTTPException(status_code=404, detail=f'{e}')
 
 
 class Frontend:
-  """REST frontend"""
+    """REST frontend"""
 
-  def __init__(self):
-    self.nx = Nixie()
-    self.app = Sanic(__name__.split('.')[0])
-    self.app.config.FALLBACK_ERROR_FORMAT = "text"
-    self.app.add_route(NixieRootView.as_view(self.nx), "/")
-    self.app.add_route(NixieCounterView.as_view(self.nx), "/<key:string>")
-    return None
+    def __init__(self):
+        self.nx = Nixie()
+        #  FastAPI(version = "v2")
+        self.app = FastAPI()
+        # self.app.config.FALLBACK_ERROR_FORMAT = "text"
 
-  def run(self, port=7312, debug=False):
-    self.app.run(port=port, debug=debug)
+        rv = NixieRootView(self.nx)
+        self.app.add_api_route(
+            path = "/",
+            endpoint = rv.read_keys,
+            methods = ["GET"]
+        )
+        self.app.add_api_route(
+            path = "/",
+            endpoint = rv.create_counter,
+            methods = ["POST"]
+        )
+
+        cv = NixieCounterView(self.nx)
+        self.app.add_api_route(
+            path = "/{key}",
+            endpoint = cv.read_counter,
+            methods = ["GET"]
+        )
+        self.app.add_api_route(
+            path = "/{key}",
+            endpoint = cv.check_counter,
+            methods = ["HEAD"]
+        )
+        self.app.add_api_route(
+            path = "/{key}",
+            endpoint = cv.update_counter,
+            methods = ["POST"]
+        )
+        self.app.add_api_route(
+            path = "/{key}",
+            endpoint = cv.update_counter_meta,
+            methods = ["PATCH"]
+        )
+        self.app.add_api_route(
+            path = "/{key}",
+            endpoint = cv.update_counter_meta,
+            methods = ["PATCH"]
+        )
+        self.app.add_api_route(
+            path = "/{key}",
+            endpoint = cv.delete_counter,
+            methods = ["DELETE"]
+        )
+        return None
+
+    def run(self, port=7312, debug=False):
+        uvicorn.run(self.app, host="0.0.0.0", port=port)
