@@ -21,7 +21,7 @@ header "Content-Type" not exists
 header "Nixie-Step" == "1"
 header "Nixie-Name" not exists
 header "Nixie-Description" not exists
-``````
+``
 
 # read counter
 GET http://127.0.0.1:7312/{{key}}
@@ -32,7 +32,7 @@ header "Content-Type" contains "text/plain"
 header "Nixie-Step" == "1"
 header "Nixie-Name" not exists
 header "Nixie-Description" not exists
-```0```
+`0`
 
 
 # update counter
@@ -44,7 +44,7 @@ header "Content-Type" contains "text/plain"
 header "Nixie-Step" == "1"
 header "Nixie-Name" not exists
 header "Nixie-Description" not exists
-```1```
+`1`
 
 
 # update counter again
@@ -56,7 +56,7 @@ header "Content-Type" contains "text/plain"
 header "Nixie-Step" == "1"
 header "Nixie-Name" not exists
 header "Nixie-Description" not exists
-```2```
+`2`
 
 
 # delete counter

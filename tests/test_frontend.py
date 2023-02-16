@@ -47,7 +47,7 @@ class FrontendTestCase(unittest.TestCase):
       'nixie-name': 'custom counter',
       'nixie-description': 'this is a custom counter'
     }
-    resp = self.client.post('/', data='3', headers=headers)
+    resp = self.client.post('/', content=b'3', headers=headers)
     self.assertEqual(resp.status_code, 201)
     self.assertTrue(resp.headers['Content-Type'].startswith('text/plain'))
     self.assertEqual(resp.headers['Nixie-Step'], '3')
@@ -73,7 +73,7 @@ class FrontendTestCase(unittest.TestCase):
     self.assertEqual(resp.text.encode(), b'6')
 
   def test_create_custom_invalid(self):
-    resp = self.client.post('/', data='3', headers={'nixie-step': 'a'})
+    resp = self.client.post('/', content=b'3', headers={'nixie-step': 'a'})
     self.assertEqual(resp.status_code, 422)
     self.assertIn('value is not a valid integer', resp.json()['detail'][0]['msg'])
 

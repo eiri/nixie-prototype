@@ -26,7 +26,7 @@ header "Content-Type" not exists
 header "Nixie-Step" == "4"
 header "Nixie-Name" == "Quoter"
 header "Nixie-Description" == "A counter with step 4"
-``````
+``
 
 
 # read counter
@@ -38,7 +38,7 @@ header "Content-Type" contains "text/plain"
 header "Nixie-Step" == "4"
 header "Nixie-Name" == "Quoter"
 header "Nixie-Description" == "A counter with step 4"
-```3```
+`3`
 
 
 # update counter
@@ -50,7 +50,7 @@ header "Content-Type" contains "text/plain"
 header "Nixie-Step" == "4"
 header "Nixie-Name" == "Quoter"
 header "Nixie-Description" == "A counter with step 4"
-```7```
+`7`
 
 
 # patch counter
@@ -67,7 +67,7 @@ header "Content-Type" not exists
 header "Nixie-Step" == "5"
 header "Nixie-Name" == "Quiter"
 header "Nixie-Description" == "A counter with step 5"
-``````
+``
 
 
 # update counter again
@@ -79,7 +79,7 @@ header "Content-Type" contains "text/plain"
 header "Nixie-Step" == "5"
 header "Nixie-Name" == "Quiter"
 header "Nixie-Description" == "A counter with step 5"
-```12```
+`12`
 
 
 # delete counter
