@@ -75,7 +75,7 @@ class FrontendTestCase(unittest.TestCase):
   def test_create_custom_invalid(self):
     resp = self.client.post('/', content=b'3', headers={'nixie-step': 'a'})
     self.assertEqual(resp.status_code, 422)
-    self.assertIn('value is not a valid integer', resp.json()['detail'][0]['msg'])
+    self.assertIn('Input should be a valid integer', resp.json()['detail'][0]['msg'])
 
   def test_read(self):
     key = self.get_key()
