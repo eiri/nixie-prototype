@@ -151,4 +151,4 @@ default ✓ [======================================] 3 VUs  00m00.5s/10m0s  1000
 
 ## License
 
-[MIT](https://github.com/eiri/nixie-prototype/blob/master/LICENSE "MIT License")
+[MIT](https://github.com/eiri/nixie-prototype/blob/main/LICENSE "MIT License")
