@@ -68,6 +68,12 @@ All with coverage `pytest --cov=nixie`
 
 All with coverage and html report `pytest --cov=nixie --cov-report html`
 
+## Lint
+
+Install [ruff](https://beta.ruff.rs/docs/) with `pip install ruff` then run `ruff check .`
+
+To autofix problems run `russ check . --fix`, ruff's pretty good with that.
+
 ## License
 
 [MIT](https://github.com/eiri/nixie-prototype/blob/master/LICENSE "MIT License")

@@ -1,4 +1,4 @@
-import unittest, time
+import unittest
 from nixie.backend import Counter, TimedRingBuffer, Backend
 
 

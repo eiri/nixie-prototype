@@ -1,4 +1,4 @@
-import unittest, time
+import unittest
 from nixie.frontend import Frontend
 from fastapi.testclient import TestClient
 
