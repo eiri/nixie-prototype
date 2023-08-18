@@ -58,7 +58,13 @@ $ ./bin/nixie-cli -d
 
 For more details read [OpenAPI specs](https://github.com/eiri/nixie-prototype/blob/master/openapi.yaml "OpenAPI specs")
 
-## Run tests
+## Lint
+
+Install [ruff](https://beta.ruff.rs/docs/) with `pip install ruff` then run `ruff check .`
+
+To autofix problems run `russ check . --fix`, ruff's pretty good with that.
+
+## Run unit tests
 
 Short `pytest`
 
@@ -68,11 +74,14 @@ All with coverage `pytest --cov=nixie`
 
 All with coverage and html report `pytest --cov=nixie --cov-report html`
 
-## Lint
 
-Install [ruff](https://beta.ruff.rs/docs/) with `pip install ruff` then run `ruff check .`
+## Run integration tests
 
-To autofix problems run `russ check . --fix`, ruff's pretty good with that.
+Install [hurl](https://hurl.dev), either with `brew` or with `asdf`.
+
+Start nixie in one terminal with `./bin/nixie-cli -d`
+
+Then run `hurl --test ./integration/*.hurl`
 
 ## License
 
