@@ -56,7 +56,7 @@ $ ./bin/nixie-cli -d
 | `PATCH`  | `/{key}` | Update metadata for a specific counter.
 | `DELETE` | `/{key}` | Delete a specific counter.
 
-For more details read [OpenAPI specs](https://github.com/eiri/nixie-prototype/blob/master/openapi.yaml "OpenAPI specs")
+For more details read [OpenAPI specs](https://github.com/eiri/nixie-prototype/blob/main/openapi.yaml "OpenAPI specs")
 
 ## Lint
 
