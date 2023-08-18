@@ -1,4 +1,5 @@
-import collections, time
+import collections
+import time
 
 from collections.abc import MutableMapping
 from nanoid import generate

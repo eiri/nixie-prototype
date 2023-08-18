@@ -16,7 +16,7 @@ class Nixie:
     return key
 
   def read(self, key):
-    if not key in self.storage:
+    if key not in self.storage:
       raise KeyError('Unknown key {}'.format(key))
     return self.storage[key]
 
@@ -64,11 +64,11 @@ class Nixie:
     return True
 
   def __validate_key(self, key):
-    if not key in self.storage:
+    if key not in self.storage:
       raise KeyError('Unknown key {}'.format(key))
 
   def __validate_key_value(self, key, value):
-    if not key in self.storage:
+    if key not in self.storage:
       raise KeyError('Unknown key {}'.format(key))
     if (isinstance(value, int)
         or value.isdigit()
