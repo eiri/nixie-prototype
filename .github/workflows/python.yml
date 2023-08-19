@@ -22,16 +22,28 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
-          cache: 'pip'
-      - uses: Gr1N/setup-poetry@v8
       - uses: actions/cache@v2
         with:
-          path: ~/.cache/pypoetry/virtualenvs
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          path: ~/.poetry
+          key: ${{ matrix.os }}-poetry
+     - name: Install latest version of Poetry
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+      - run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
       - run: poetry --version
+      - run: poetry check --no-interaction
+      - id: cache-deps
+        uses: actions/cache@v2
+        with:
+          path: ${{github.workspace}}/.venv
+          key: ${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: ${{ matrix.os }}-
       - name: Install deps
-        run: poetry install
+        if: steps.cache-deps.cache-hit != 'true'
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install --no-interaction
       - name: Run pytest
-        run: poetry run pytest --cov=nixie
+        run: poetry run pytest -v --cov=nixie
       - name: Build artifacts
         run: poetry build
