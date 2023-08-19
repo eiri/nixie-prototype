@@ -26,7 +26,7 @@ jobs:
         with:
           path: ~/.poetry
           key: ${{ matrix.os }}-poetry
-     - name: Install latest version of Poetry
+      - name: Install latest version of Poetry
         if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
       - run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
