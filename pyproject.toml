@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "nixie-prototype"
+version = "0.3.0"
+description = "Service that allows to create, update and delete counters"
+authors = ["Eric Avdey <eiri@eiri.ca>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "nixie"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.101.1"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+nanoid = "^2.0.0"
+click = "^8.1.7"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+httpx = "^0.24.1"
+
+
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.0.285"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
