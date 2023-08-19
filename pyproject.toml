@@ -17,8 +17,12 @@ click = "^8.1.7"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.0"
-ruff = "^0.0.285"
 pytest-cov = "^4.1.0"
+httpx = "^0.24.1"
+
+
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.0.285"
 
 [build-system]
 requires = ["poetry-core"]
