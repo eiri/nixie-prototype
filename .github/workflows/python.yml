@@ -29,6 +29,8 @@ jobs:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       - run: poetry --version
+      - name: Install deps
+        run: poetry install
       - name: Run pytest
         run: poetry run pytest --cov=nixie
       - name: Build artifacts
