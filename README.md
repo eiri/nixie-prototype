@@ -10,20 +10,17 @@ Service that allows to create, update and delete counters.
 ## tl;dr
 
 ```bash
-$ python -m venv venv
-$ . ./venv/bin/activate
-$ python -m pip install --upgrade pip
-$ pip install -r requirements.txt
-$ pytest
-$ ./bin/nixie-cli -d
+$ poetry run pytest
+$ poetry run ./bin/nixie-cli -d
 ```
 
 ## Setup
-Make and activate venv. Then `pip install -r requirements.txt`
+
+Managed by [poetry](https://python-poetry.org) so `poetry install`
 
 ## Run server
 ```bash
-$ ./bin/nixie-cli -h
+$ poetry run ./bin/nixie-cli -h
 Usage: nixie-cli [OPTIONS]
 
   Start Nixie server
@@ -34,13 +31,13 @@ Options:
   -d, --debug         run server in debug mode
   -h, --help          Show this message and exit.
 
-$ ./bin/nixie-cli -d
- * Running on http://127.0.0.1:7312/ (Press CTRL+C to quit)
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 140-209-625
-127.0.0.1 - - [03/Nov/2017 11:20:36] "POST / HTTP/1.1" 201 -
-127.0.0.1 - - [03/Nov/2017 11:20:45] "GET /7ybcVEkCLNcdD9X3zGMid HTTP/1.1" 200 -
+$ poetry run ./bin/nixie-cli -d
+INFO:     Started server process [30903]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:7312 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60963 - "POST / HTTP/1.1" 201 Created
+INFO:     127.0.0.1:60969 - "GET /UqkqNJyDHYGU8NN8PQtYf HTTP/1.1" 200 OK
 ...
 ```
 
@@ -60,28 +57,49 @@ For more details read [OpenAPI specs](https://github.com/eiri/nixie-prototype/bl
 
 ## Lint
 
-Install [ruff](https://beta.ruff.rs/docs/) with `pip install ruff` then run `ruff check .`
-
-To autofix problems run `russ check . --fix`, ruff's pretty good with that.
+To lint `poetry run ruff check .` To also autofix problems `poetry run ruff check . --fix`, ruff's pretty good with that.
 
 ## Run unit tests
 
-Short `pytest`
+Just run `poetry run pytest`
 
-Single suite and verbose `pytest tests/test_api.py -sv`
+For a single suite test  and verbose output `poetry run pytest tests/test_api.py -sv`
 
-All with coverage `pytest --cov=nixie`
+To get all the coverage `poetry run pytest --cov=nixie` and to also get html repost `poetry run pytest --cov=nixie --cov-report html`
 
-All with coverage and html report `pytest --cov=nixie --cov-report html`
+```
+$ poetry run pytest --cov=nixie
+============================================================================= test session starts =============================================================================
+platform darwin -- Python 3.10.9, pytest-7.4.0, pluggy-1.2.0
+rootdir: /Users/eiri/Code/github.com/eiri/nixie-prototype
+plugins: cov-4.1.0, anyio-3.7.1
+collected 55 items
 
+tests/test_api.py ...............                                                                                                                                       [ 27%]
+tests/test_backend.py ..........................                                                                                                                        [ 74%]
+tests/test_frontend.py ..............                                                                                                                                   [100%]
+
+---------- coverage: platform darwin, python 3.10.9-final-0 ----------
+Name                Stmts   Miss  Cover
+---------------------------------------
+nixie/__init__.py       0      0   100%
+nixie/api.py           62      0   100%
+nixie/backend.py       73      1    99%
+nixie/frontend.py      82      1    99%
+---------------------------------------
+TOTAL                 217      2    99%
+
+
+============================================================================= 55 passed in 0.57s ==============================================================================
+```
 
 ## Run integration tests
 
 Install [hurl](https://hurl.dev) either with `brew` or with `asdf`.
 
-Start nixie in one terminal with `./bin/nixie-cli -d`
+Start nixie in one terminal with `poetry run ./bin/nixie-cli -d`
 
-Then run `hurl --test ./integration/*.hurl`
+Then run `hurl --test ./integration/*.hurl` in another terminal.
 
 ```
 $ hurl --test ./integration/*.hurl
@@ -102,9 +120,9 @@ Duration:        37 ms
 
 Install [k6](https://k6.io) either with `brew` or with `asdf`.
 
-Start nixie in one terminal with `./bin/nixie-cli -d`
+Start nixie in one terminal with `poetry run ./bin/nixie-cli -d`
 
-Then run ` k6 run benchmark/script.js`
+Then run ` k6 run benchmark/script.js` in another terminal.
 
 ```
 $ k6 run benchmark/script.js
