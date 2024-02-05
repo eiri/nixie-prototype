@@ -9,7 +9,7 @@ packages = [{include = "nixie"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.101.1"
+fastapi = "^0.109.1"
 uvicorn = {extras = ["standard"], version = "^0.23.2"}
 nanoid = "^2.0.0"
 click = "^8.1.7"
