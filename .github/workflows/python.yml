@@ -1,49 +1,36 @@
 ---
-name: CI
+name: tests
 
 on:
-  push:
-    branches: ['main']
   pull_request:
+    branches: ['main']
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: chartboost/ruff-action@v1
   test:
     strategy:
       matrix:
         python: ['3.10', '3.11']
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - name: Setup python ${{ matrix.python }}
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - uses: actions/cache@v2
+      - name: Install poetry
+        run: python -m pip install poetry
+      - name: Configure poetry
+        run: poetry config virtualenvs.in-project true
+      - name: Cache the virtualenv
+        uses: actions/cache@v4
         with:
-          path: ~/.poetry
-          key: ${{ matrix.os }}-poetry
-      - name: Install latest version of Poetry
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: curl -sSL https://install.python-poetry.org | python3 -
-      - run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
-      - run: poetry --version
-      - run: poetry check --no-interaction
-      - id: cache-deps
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/.venv
-          key: ${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: ${{ matrix.os }}-
-      - name: Install deps
-        if: steps.cache-deps.cache-hit != 'true'
-        run: |
-          poetry config virtualenvs.in-project true
-          poetry install --no-interaction
-      - name: Run pytest
+          path: ./.venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Lint
+        run: poetry run ruff check --show-files --exit-non-zero-on-fix
+      - name: Run tests
         run: poetry run pytest -v --cov=nixie
       - name: Build artifacts
         run: poetry build

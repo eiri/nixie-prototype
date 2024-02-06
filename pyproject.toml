@@ -10,19 +10,19 @@ packages = [{include = "nixie"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.109.1"
-uvicorn = {extras = ["standard"], version = "^0.23.2"}
+uvicorn = "^0.27.0.post1"
 nanoid = "^2.0.0"
 click = "^8.1.7"
 
 
 [tool.poetry.group.test.dependencies]
-pytest = "^7.4.0"
+pytest = "^8.0.0"
 pytest-cov = "^4.1.0"
-httpx = "^0.24.1"
+httpx = "^0.26.0"
 
 
 [tool.poetry.group.lint.dependencies]
-ruff = "^0.0.285"
+ruff = "^0.2.1"
 
 [build-system]
 requires = ["poetry-core"]
