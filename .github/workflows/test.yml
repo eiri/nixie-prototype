@@ -3,13 +3,13 @@ name: tests
 
 on:
   pull_request:
-    branches: ['main']
+    branches: ["main"]
 
 jobs:
   test:
     strategy:
       matrix:
-        python: ['3.10', '3.11']
+        python: ["3.12", "3.13"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
