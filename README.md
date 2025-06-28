@@ -10,7 +10,7 @@ Service that allows to create, update and delete counters.
 ## tl;dr
 
 ```bash
-$ uv run -group pytest
+$ uv run -group test pytest
 $ uv run ./bin/nixie-cli -d
 ```
 
