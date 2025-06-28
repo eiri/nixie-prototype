@@ -1,5 +1,5 @@
 ---
-name: Test & Build
+name: Tests
 
 on:
   pull_request:
